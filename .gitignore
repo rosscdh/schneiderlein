@@ -1,0 +1,8 @@
+
+*.pyc
+.AppleDouble
+:2e_*
+._*
+.DS_Store
+
+

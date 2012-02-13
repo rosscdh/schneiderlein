@@ -125,7 +125,9 @@ INSTALLED_APPS = (
     'django_extensions',
     'south',
 
-    'treebeard',
+    'categories',
+    'categories.editor',
+
     'lettuce.django',
 	'taggit',
     'apps.tailor',

@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+{% load adminmedia admin_list i18n %}
+{% load url from future %}
+
+
+{% block content %}
+<h1>Import remote sitemap.xml</h1>
+<p>&nbsp;</p>
+<form enctype="multipart/form-data" action="" method="post">{% csrf_token %}
+{{ form_sitemapfile }}
+<br/><input type="submit" value="Submit" />
+</form>
+<p>&nbsp;</p>
+<h2>OR</h2>
+<p>&nbsp;</p>
+<form action="" method="post">{% csrf_token %}
+{{ form_sitemapurl }}
+<br/><input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

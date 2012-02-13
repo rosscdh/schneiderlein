@@ -1,16 +1,17 @@
 from django.db import models
-from treebeard.mp_tree import MP_Node
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
 
+import categories
 
-class Page(MP_Node):
+
+class Page(models.Model):
+    parent = models.ForeignKey("self", blank=True, null=True, related_name="children")
     url = models.URLField()
     slug = models.SlugField()
     test_elements = TaggableManager()
 
-    node_order_by = ['url']
 
 
 class LoginPage(Page):
@@ -20,4 +21,4 @@ class LoginPage(Page):
     password_element = models.CharField(max_length=128)
 
 
-    
+categories.register_fk(Page)

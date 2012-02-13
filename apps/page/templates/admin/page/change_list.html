@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% load adminmedia admin_list i18n %}
+{% load url from future %}
+
+
+{% block content %}
+	{% block object-tools %}
+	  {% if has_add_permission %}
+	    <ul class="object-tools">
+	      {% block object-tools-items %}
+	        <li>
+	          <a href="sitemap/import/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
+	            {% blocktrans with cl.opts.verbose_name as name %}Import sitemap.xml{% endblocktrans %}
+	          </a>
+	        </li>
+	        <li>
+	          <a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
+	            {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+	          </a>
+	        </li>
+	      {% endblock %}
+	    </ul>
+	  {% endif %}
+	{% endblock %}
+{% endblock %}

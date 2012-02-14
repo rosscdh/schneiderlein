@@ -8,8 +8,7 @@ lettuce
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 -e git+https://github.com/stard0g101/needle.git#egg=needle
 -e git+https://github.com/dragoon/django-selenium.git#egg=django-selenium
--e git+https://github.com/andreisavu/python-sitemap.git#egg=python-sitemap
-lxml
+-e git+https://github.com/stchris/untangle.git#egg=untangle
 PIL
 selenium
 nose

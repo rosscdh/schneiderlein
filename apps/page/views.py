@@ -11,11 +11,13 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from forms import ImportSitemapUrlForm, ImportSitemapFileForm
+from util import Sitemap
+
 
 @login_required
 def admin_sitemap_import(request):
-    import sitemap
 
+    SiteMap = None
     form_sitemapurl = ImportSitemapUrlForm()
     form_sitemapfile = ImportSitemapFileForm()
 
@@ -23,16 +25,17 @@ def admin_sitemap_import(request):
         if request.POST.get('sitemap_url', None) is not None:
             form = ImportSitemapUrlForm(request.POST)
             if form.is_valid():
-                urls = sitemap.UrlSet.from_url(form.cleaned_data['sitemap_url'])
+                SiteMap = Sitemap(form.cleaned_data['sitemap_url'])
 
-        if request.POST.get('sitemap_file', None) is not None:
-            form = ImportSitemapFileForm(request.POST)
-            urls = []
+        if request.FILES.get('sitemap_file', None) is not None:
+            form = ImportSitemapFileForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.handle_uploaded_file(request.FILES['sitemap_file'])
+                #local_sitemap_url = '%s%s%s' % ('http://' if not request.is_secure() else 'https://', request.get_host(), form.get_absolute_url(), )
+                SiteMap = Sitemap('/tmp/sitemap.xml')
 
-        if form and form.is_valid():
-
-            for url in urls:
-                print url
+        if SiteMap:
+            SiteMap.get_set_pages()
             assert False
 
     return render_to_response(

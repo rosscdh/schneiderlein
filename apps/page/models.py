@@ -11,7 +11,7 @@ class Page(models.Model):
     url = models.URLField()
     slug = models.SlugField()
     test_elements = TaggableManager()
-
+categories.register_fk(Page)
 
 
 class LoginPage(Page):
@@ -21,4 +21,3 @@ class LoginPage(Page):
     password_element = models.CharField(max_length=128)
 
 
-categories.register_fk(Page)

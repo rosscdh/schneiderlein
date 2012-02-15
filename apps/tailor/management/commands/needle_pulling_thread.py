@@ -7,8 +7,9 @@ NEEDLE_TOLERANCE  = 2.5#getattr(settings, 'NEEDLE_TOLERANCE', 0.5)
 class SchneiderleinTest(NeedleTestCase):
     """ Generic test for schniderlein """
     def test_generic(self, url=None, elements=None):
-        url = 'http://www.sedo.com/us/home/getting-started/?tracked=&partnerid=&language=us'
-        elements = ['div#header', 'div#domainSearch', 'div#contentTeaser', 'div#footer']
+        #url = 'http://www.sedo.com/us/home/getting-started/?tracked=&partnerid=&language=us'
+        url = 'http://www.sedo.com/us/sedo/sedomls'
+        elements = ['#page_margins #page_wrapper div.contentbase div#col3 div#col3_content div.content div.imagefull']
 
         """ method to test a url and specific elements on that url"""
         if len(elements) > 0:

@@ -5,5 +5,5 @@
 :2e_*
 ._*
 .DS_Store
-
+apps/tailor/management/commands/*.png
 

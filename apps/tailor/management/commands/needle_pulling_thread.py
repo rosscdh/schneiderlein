@@ -8,8 +8,8 @@ class SchneiderleinTest(NeedleTestCase):
     """ Generic test for schniderlein """
     def test_generic(self, url=None, elements=None):
         #url = 'http://www.sedo.com/us/home/getting-started/?tracked=&partnerid=&language=us'
-        url = 'http://www.sedo.com/us/sedo/sedomls'
-        elements = ['#page_margins #page_wrapper div.contentbase div#col3 div#col3_content div.content div.imagefull']
+        url = 'http://www.sedo.com/us/about-us/press/press-downloads'
+        elements = ['div#col3_content div.content div.m01 whitebox', 'div#col3_content div.precontent p.bodytext', 'div#col3_content div.precontent']
 
         """ method to test a url and specific elements on that url"""
         if len(elements) > 0:

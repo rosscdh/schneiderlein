@@ -23,22 +23,31 @@
 				});
 
 				//$c.find('body').prepend('<b>This is a test</b><br><b>Click here</b>');
-				$c.delegate('div,p,table,ul', 'hover', function() {
+				$c.delegate('div,span,p,table,tr,td,ul,a', 'hover', function() {
 				    $(this).css('border', 'solid #c00 1px')
 				});
-				$c.delegate('div,p,table,ul', 'mouseleave', function() {
+				$c.delegate('div,span,p,table,tr,td,ul,a', 'mouseleave', function() {
 				    $(this).css('border', '')
 				});
-				$c.delegate('div,p,table,ul', 'click', function(event) {
+				$c.delegate('div,span,p,table,tr,td,ul,a', 'click', function(event) {
 					log = 'id: ' + $(this).attr('id') + ' class:' + $(this).attr('class')
 			        var path = [];
+		            var id = $(this).attr("id");
+		            var clazz = $(this).attr("class");
+					var element = $(this).get(0).tagName.toLowerCase()
+					path.push(element + (id.length > 0 ? "#" + id : (clazz.length > 0 ? ".": "") + clazz));
+
 			        $.each($(this).parents(), function(index, value) {
-			            var id = $(value).attr("id");
-			            var clazz = $(value).attr("class");
-			            var element = $(value).get(0).tagName.toLowerCase()
-			                path.push(element + (id.length > 0 ? " #" + id : (clazz.length > 0 ? " .": "") + clazz));
+			            id = $(value).attr("id");
+			            clazz = $(value).attr("class");
+			            element = $(value).get(0).tagName.toLowerCase()
+			                path.push(element + (id.length > 0 ? "#" + id : (clazz.length > 0 ? ".": "") + clazz));
+							// if we have an id element, break loop
+							if (id.length > 0) {
+								return false;
+							}
 			        });
-			        alert(path.reverse().join(">"));
+					$('div#overview_page').html(path.reverse().join(" "));
 			        return false;
 				});
 

@@ -1,30 +1,35 @@
 import os
 import untangle
 import urlparse
-
+from django.template.defaultfilters import slugify
 from models import Page
 
 
 class Sitemap(object):
     sitemap_file = None
     parsed_sitemap = None
-    urls = []
+    url_tree = dict({})
 
     def __init__(self, sitemap):
         self.sitemap_file = sitemap
         self.parsed_sitemap = untangle.parse(sitemap)
-        self.urls = self.parse(self.parsed_sitemap)
+        urls = self.parse(self.parsed_sitemap)
 
-        for i in self.urls:
+        for i in urls:
             url = i
             p = urlparse.urlparse(i)
 
             fileName, fileExtension = os.path.splitext(p.path)
             if fileExtension == '.xml':
+
+                if url not in self.url_tree:
+                    self.url_tree[url] = []
+
                 new_urls = self.parse(untangle.parse(url))
+
                 if len(new_urls) > 0:
                     for u in new_urls:
-                        self.urls.append(u)
+                        self.url_tree[url].append(u)
 
 
     def __unicode__(self):
@@ -47,5 +52,11 @@ class Sitemap(object):
         return urls
 
     def get_set_pages(self):
-        for u in self.urls:
-            Page.objects.get_or_create(url=u, slug=u,defaults={'parent': None,})
+        for key,value_list in self.url_tree.iteritems():
+            parent, is_created = Page.objects.get_or_create(url=key, slug=slugify(key))
+            if is_created == False:
+                parent.save()
+            for u in value_list:
+                child, is_created = Page.objects.get_or_create(url=u, slug=slugify('%s-%s'%(key,u)), defaults={'parent': parent,})
+                if is_created == False:
+                    child.save()

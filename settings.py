@@ -125,11 +125,11 @@ INSTALLED_APPS = (
     'django_extensions',
     'south',
 
-    'categories',
-    'categories.editor',
+    'mptt',
 
     'lettuce.django',
 	'taggit',
+
     'apps.tailor',
     'apps.page',
 )

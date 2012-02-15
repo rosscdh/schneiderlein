@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
 
 from mptt.models import MPTTModel, TreeForeignKey
+from mptt.managers import TreeManager
+
 
 class Page(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
@@ -11,6 +13,7 @@ class Page(MPTTModel):
     slug = models.SlugField()
     test_elements = TaggableManager()
 
+    objects = tree = TreeManager()
 
     class MPTTMeta:
         order_insertion_by = ['url']

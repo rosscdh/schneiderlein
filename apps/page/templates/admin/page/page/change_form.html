@@ -12,6 +12,37 @@
 	    $(document).ready(function($) {
 
 			target_div = $('div#overview_page');
+
+			$('#overview_target').load(function(){
+				var $c = $('#overview_target').contents();
+				
+				$c.find('a').attr('href', "#");
+				$c.delegate('a', 'hover', function() {
+					event.preventDefault();
+					return false;
+				});
+
+				//$c.find('body').prepend('<b>This is a test</b><br><b>Click here</b>');
+				$c.delegate('div,p,table,ul', 'hover', function() {
+				    $(this).css('border', 'solid #c00 1px')
+				});
+				$c.delegate('div,p,table,ul', 'mouseleave', function() {
+				    $(this).css('border', '')
+				});
+				$c.delegate('div,p,table,ul', 'click', function(event) {
+					log = 'id: ' + $(this).attr('id') + ' class:' + $(this).attr('class')
+			        var path = [];
+			        $.each($(this).parents(), function(index, value) {
+			            var id = $(value).attr("id");
+			            var clazz = $(value).attr("class");
+			            var element = $(value).get(0).tagName.toLowerCase()
+			                path.push(element + (id.length > 0 ? " #" + id : (clazz.length > 0 ? " .": "") + clazz));
+			        });
+			        alert(path.reverse().join(">"));
+			        return false;
+				});
+
+			});
 			// $.ajax({ 
 			// 	type: 'get',
 			// 	url: '{% url page-load_remote page_id=original.id %}',
@@ -29,6 +60,9 @@
 	#overview_target{
 		width:100%;
 		height:600px;
+	}
+	.hover{
+		border:solid #c00 2px;
 	}
 	</style>
 	{{ block.super }}

@@ -18,7 +18,6 @@ class Sitemap(object):
         for i in urls:
             url = i
             p = urlparse.urlparse(i)
-
             fileName, fileExtension = os.path.splitext(p.path)
             if fileExtension == '.xml':
 
@@ -53,10 +52,17 @@ class Sitemap(object):
 
     def get_set_pages(self):
         for key,value_list in self.url_tree.iteritems():
-            parent, is_created = Page.objects.get_or_create(url=key, slug=slugify(key))
+
+            p = urlparse.urlparse(key)
+            fileName, fileExtension = os.path.splitext(p.path)
+
+            parent, is_created = Page.objects.get_or_create(url=key, slug=slugify(fileName))
             if is_created == False:
                 parent.save()
             for u in value_list:
-                child, is_created = Page.objects.get_or_create(url=u, slug=slugify('%s-%s'%(key,u)), defaults={'parent': parent,})
+                p = urlparse.urlparse(u)
+                fileName, fileExtension = os.path.splitext(p.path)
+
+                child, is_created = Page.objects.get_or_create(url=u, slug=slugify(fileName), defaults={'parent': parent,})
                 if is_created == False:
                     child.save()

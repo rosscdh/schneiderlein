@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.encoding import smart_unicode
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
@@ -41,6 +41,7 @@ def admin_sitemap_import(request):
 
         if UploadedSiteMap is not None:
             UploadedSiteMap.get_set_pages()
+            return HttpResponseRedirect( reverse('admin:page_page_changelist') )
 
     return render_to_response(
         'admin/page/sitemap_import.html', {

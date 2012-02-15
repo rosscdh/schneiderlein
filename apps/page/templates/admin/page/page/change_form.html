@@ -1,7 +1,15 @@
 {% extends "admin/change_form.html" %}
 
 {% block after_field_sets %}
+	{% if not original %}
+	<h2>No Page Elements Available</h2>
+	<p>Please add a new page and ensure that the url you provide is correct</p>
+	{% else %}
 	<h2>Select Page Elements to Test</h2>
+	<ul class="object-tools">
+	<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Update Screen</a></li>
+	<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">View Logs</a></li>
+	</ul>
 	<div class="module aligned">
 		<div id="overview_page">&nbsp;</div>
 		<iframe class="module aligned" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="98%" height="600"></iframe>
@@ -74,5 +82,6 @@
 		border:solid #c00 2px;
 	}
 	</style>
+	{% endif %}
 	{{ block.super }}
 {% endblock %}

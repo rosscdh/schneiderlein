@@ -33,9 +33,7 @@
 				<p>If no elements are selected, then a screenshot of the html element is taken and is tested against.</p>
 				<iframe class="module aligned" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
 				<div id="overview_page">&nbsp;</div>
-				<ul id="selected_elements">
-					<li>Select elements to test</li>
-				</ul>
+				<ul id="selected_elements"></ul>
 			</div>
 		</div>
 
@@ -63,6 +61,11 @@
 		}
 		.hover{
 			border:solid #c00 2px;
+		}
+		a.list_remove{
+			border:solid #ccc 1px;
+			background-color:#ddd;
+			padding:2px 4px;
 		}
 		</style>
 
@@ -113,8 +116,23 @@
 								return false;
 							}
 			        });
-					$('div#overview_page').html(path.reverse().join(" "));
+					css_xpath = path.reverse().join(" ");
+					$('ul#selected_elements').append('<li>'+ css_xpath +'&nbsp;<a class="list_remove" data-css_path="'+ css_xpath +'" href="#" title="Remove"><strong>x</strong></a></li>');
 			        return false;
+				});
+
+				$('li a.list_remove').live('click', function(event) {
+					event.preventDefault();
+					//alert($(this).attr('data-css_path'))
+					$(this).parent().remove();// remove the containing LI
+				});
+				$('ul#selected_elements li').live('mouseover', function(event) {
+					css_path = $(this).find('a.list_remove').attr('data-css_path');
+					$c.find(css_path).css('border', 'solid #c00 1px')
+				});
+				$('ul#selected_elements li').live('mouseout', function(event) {
+					css_path = $(this).find('a.list_remove').attr('data-css_path');
+					$c.find(css_path).css('border', '')
 				});
 
 			});

@@ -10,10 +10,14 @@ from mptt.managers import TreeManager
 class SequenceTest(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     name = models.CharField(max_length=128, blank=False)
-    body = models.TextField(blank=True,null=True)
+    body = models.TextField(verbose_name=_('Test Code'), help_text=_('Cucumber/Selenium test steps'), blank=True,null=True)
     is_active = models.BooleanField(default=True)
 
     objects = tree = TreeManager()
+
+    class Meta:
+        verbose_name = _('Test Step')
+        verbose_name_plural = _('Test Steps')
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -29,6 +33,10 @@ class Sequence(MPTTModel):
     is_active = models.BooleanField(default=True)
 
     objects = tree = TreeManager()
+
+    class Meta:
+        verbose_name = _('Test Sequence')
+        verbose_name_plural = _('Test Sequences')
 
     class MPTTMeta:
         order_insertion_by = ['name']

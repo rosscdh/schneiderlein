@@ -13,3 +13,4 @@ class SequenceAdmin(admin.ModelAdmin):
     exclude = ('tests',)
 
 admin.site.register(Sequence, SequenceAdmin)
+admin.site.register([SequenceTest])

@@ -21,6 +21,7 @@ class PageAdmin(admin.ModelAdmin):
         host_admin_urls = patterns('',
             url(r'^sitemap/import/$', self.admin_site.admin_view(admin_sitemap_import), name='page.admin_sitemap_import',),
         )
+
         return host_admin_urls + urls
 
 admin.site.register(Page, PageAdmin)

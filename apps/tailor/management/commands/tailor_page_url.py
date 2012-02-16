@@ -41,7 +41,7 @@ class Command(BaseCommand):
         if all_pages == True:
             args = []
             for page in Page.objects.all():
-                self.test_page(page.url, page.test_elements.all(), page=page)
+                self.test_page(page.url, page.test_layout_elements.all(), page=page)
         else:
             for page_id in args:
                 try:
@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 except Page.DoesNotExist:
                     raise CommandError('Page "%s" does not exist' % page_id)
 
-                self.test_page(page.url, page.test_elements.all(), page=page)
+                self.test_page(page.url, page.test_layout_elements.all(), page=page)
 
     def test_page(self, url, elements=None, page=None):
         """ selenium test the url using needle """
@@ -59,6 +59,7 @@ class Command(BaseCommand):
             elements = ['html']
 
         # get needle driver url
+        url = 'http://www.sedo.com/us/about-us/careers/our-departments'
         self.needle.driver.get( url )
 
         # set needle output path

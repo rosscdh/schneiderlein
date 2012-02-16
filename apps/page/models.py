@@ -18,6 +18,8 @@ class Page(MPTTModel):
     test_layout_elements = TaggableManager()
     sequence_tests = models.ManyToManyField(Sequence, related_name='pages')
 
+    is_active = models.BooleanField(default=True)
+
     objects = tree = TreeManager()
 
     class MPTTMeta:

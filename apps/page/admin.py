@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.conf.urls.defaults import *
-from models import Page, LoginPage
+from models import Page
 from views import admin_sitemap_import
+
 
 class PageAdmin(admin.ModelAdmin):
     list_display = ('url', 'is_child',)
-#    list_filter = ('is_child', 'is_parent',)
 
     def get_urls(self):
         urls = super(PageAdmin, self).get_urls()
@@ -14,5 +14,4 @@ class PageAdmin(admin.ModelAdmin):
         )
         return host_admin_urls + urls
 
-admin.site.register([LoginPage])
 admin.site.register(Page, PageAdmin)

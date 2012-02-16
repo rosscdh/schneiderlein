@@ -11,7 +11,9 @@ class Page(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     url = models.URLField()
     slug = models.SlugField()
-    test_elements = TaggableManager()
+    test_sequences = models.BooleanField(default=True)
+    test_layout = models.BooleanField(default=True)
+    test_layout_elements = TaggableManager()
 
     objects = tree = TreeManager()
 
@@ -28,11 +30,4 @@ class Page(MPTTModel):
     @property
     def is_child(self):
         return True if self.parent is not None else False
-
-class LoginPage(Page):
-    username = models.CharField(max_length=128)
-    username_element = models.CharField(max_length=128)
-    password = models.CharField(max_length=128)
-    password_element = models.CharField(max_length=128)
-
 

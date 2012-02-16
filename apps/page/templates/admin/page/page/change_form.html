@@ -7,100 +7,55 @@
 	{% else %}
 		<h2>Select Page Elements to Test</h2>
 		<!-- Implement jquery tabs -->
+		<div id="tabs">
 		<ul>
-			<li><a href="">Test Sequences</a></li>
-			<li><a href="">Test Elements</a></li>
-			<li><a href="">Build Results</a></li>
+			<li><a href="#tabs-1">Test Sequences</a></li>
+			<li><a href="#tabs-2">Test Elements</a></li>
+			<li><a href="#tabs-3">Build Results</a></li>
 		</ul>
+		</div>
 
 		<!-- Test sequences -->
-		<!-- Test Elements -->
-		<ul class="object-tools">
-		<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
-		<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">View Logs</a></li>
-		</ul>
-		<!-- Build Results -->
-		<ul class="object-tools">
-		<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Build now</a></li>
-		</ul>
-
-		<!-- Test sequences -->
-		<div class="module aligned">
+		<div id="tabs-1" class="module aligned">
 			<h3>Test Sequences</h3>
 			<p>Here the user is able to select and add to a sequence of cucumber tests that will be run against this page.</p>
 			<p>This will allow the page to be tested for the presence of specific html and general functionality</p>
 		</div>
 
 		<!-- Test Elements -->
-		<div class="module aligned">
+		<div id="tabs-2">
 			<h3>Test Elements</h3>
-			<p>Here you are able to set your test build to test individual page elements.</p>
-			<p>If no elements are selected, then a screenshot of the html element is taken and is tested against.</p>
-			<iframe class="module aligned" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
-			<div id="overview_page">&nbsp;</div>
-			<ul id="selected_elements">
-				<li>Select elements to test</li>
+			<ul class="object-tools">
+				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
 			</ul>
+			<div class="module aligned">
+				<p>Here you are able to set your test build to test individual page elements.</p>
+				<p>If no elements are selected, then a screenshot of the html element is taken and is tested against.</p>
+				<iframe class="module aligned" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
+				<div id="overview_page">&nbsp;</div>
+				<ul id="selected_elements">
+					<li>Select elements to test</li>
+				</ul>
+			</div>
 		</div>
-		<script>
-		(function($) {
 
-		    $(document).ready(function($) {
 
-				target_div = $('div#overview_page');
+		<!-- Build Results -->
+		<div id="tabs-3">
+			<h3>Build Results</h3>
+			<ul class="object-tools">
+			<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Build now</a></li>
+			</ul>
+			<div class="module aligned">
+			<p>Here the user is able to view previous build results, as well as schedule a new build to run now.</p>
+			<p>A navigable list of build logs [datetime, build_result, build_thumbnail]</p>
+			<p>The list rows are clickable and when clicked will show a modal window with the selected build log as well as a larger version of the build_thumbnail</p>
+			<p>build_thumbnail == a dual screenshot of the result_thumbnail next to the baseline_thumbnail, for historical comparison</p>
+			</div>
+		</div>
 
-				$('#overview_target').load(function(){
-					var $c = $('#overview_target').contents();
-				
-					$c.find('a').attr('href', "#");
-					$c.delegate('a', 'hover', function() {
-						event.preventDefault();
-						return false;
-					});
 
-					//$c.find('body').prepend('<b>This is a test</b><br><b>Click here</b>');
-					$c.delegate('div,span,p,table,tr,td,ul,a', 'hover', function() {
-					    $(this).css('border', 'solid #c00 1px')
-					});
-					$c.delegate('div,span,p,table,tr,td,ul,a', 'mouseleave', function() {
-					    $(this).css('border', '')
-					});
-					$c.delegate('div,span,p,table,tr,td,ul,a', 'click', function(event) {
-						log = 'id: ' + $(this).attr('id') + ' class:' + $(this).attr('class')
-				        var path = [];
-			            var id = $(this).attr("id");
-			            var clazz = $(this).attr("class");
-						var element = $(this).get(0).tagName.toLowerCase()
-						path.push(element + (id.length > 0 ? "#" + id : (clazz.length > 0 ? ".": "") + clazz));
-
-				        $.each($(this).parents(), function(index, value) {
-				            id = $(value).attr("id");
-				            clazz = $(value).attr("class");
-				            element = $(value).get(0).tagName.toLowerCase()
-				                path.push(element + (id.length > 0 ? "#" + id : (clazz.length > 0 ? ".": "") + clazz));
-								// if we have an id element, break loop
-								if (id.length > 0) {
-									return false;
-								}
-				        });
-						$('div#overview_page').html(path.reverse().join(" "));
-				        return false;
-					});
-
-				});
-				// $.ajax({ 
-				// 	type: 'get',
-				// 	url: '{% url page-load_remote page_id=original.id %}',
-				// 	beforeSend: function(){
-				// 	},
-				// 	success: function(data, textStatus, XMLHttpRequest){
-				// 		target_div.html( data );
-				// 	}
-				// });
-
-			});
-		})(django.jQuery);
-		</script>
+	
 		<style>
 		#overview_target{
 			width:70%;
@@ -111,15 +66,59 @@
 		}
 		</style>
 
-		<!-- Build Results -->
-		<div class="module aligned">
-			<h3>Build Results</h3>
-			<p>Here the user is able to view previous build results, as well as schedule a new build to run now.</p>
-			<p>A navigable list of build logs [datetime, build_result, build_thumbnail]</p>
-			<p>The list rows are clickable and when clicked will show a modal window with the selected build log as well as a larger version of the build_thumbnail</p>
-			<p>build_thumbnail == a dual screenshot of the result_thumbnail next to the baseline_thumbnail, for historical comparison</p>
-		</div>
+		<script>(function($){jQuery = $.noConflict(true);})(django.jQuery);</script>
+		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/jquery.tools.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+		<script type="text/javascript">
+		(function($) {
+	    $(document).ready(function($) {
 
+			//$( "#tabs" ).tabs();
+
+			target_div = $('div#overview_page');
+
+			$('#overview_target').load(function(){
+				var $c = $('#overview_target').contents();
+
+				$c.find('a').attr('href', "#");
+				$c.delegate('a', 'hover', function() {
+					event.preventDefault();
+					return false;
+				});
+
+				$c.delegate('div,span,p,table,tr,td,ul,a', 'hover', function(event) {
+				    $(this).css('border', 'solid #c00 1px')
+				});
+				$c.delegate('div,span,p,table,tr,td,ul,a', 'mouseleave', function(event) {
+				    $(this).css('border', '')
+				});
+				$c.delegate('div,span,p,table,tr,td,ul,a', 'click', function(event) {
+					log = 'id: ' + $(this).attr('id') + ' class:' + $(this).attr('class')
+			        var path = [];
+		            var id = $(this).attr("id");
+		            var clazz = $(this).attr("class");
+					var element = $(this).get(0).tagName.toLowerCase()
+					path.push(element + (id.length > 0 ? "#" + id : (clazz.length > 0 ? ".": "") + clazz));
+
+			        $.each($(this).parents(), function(index, value) {
+			            id = $(value).attr("id");
+			            clazz = $(value).attr("class");
+			            element = $(value).get(0).tagName.toLowerCase()
+			                path.push(element + (id.length > 0 ? "#" + id : (clazz.length > 0 ? ".": "") + clazz));
+							// if we have an id element, break loop
+							if (id.length > 0) {
+								return false;
+							}
+			        });
+					$('div#overview_page').html(path.reverse().join(" "));
+			        return false;
+				});
+
+			});
+
+		});
+		})(django.jQuery);
+		</script>
 	{% endif %}
 	{{ block.super }}
 {% endblock %}

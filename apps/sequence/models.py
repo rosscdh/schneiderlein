@@ -7,27 +7,32 @@ from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager
 
 
-class Sequence(MPTTModel):
+class SequenceTest(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     name = models.CharField(max_length=128, blank=False)
-    slug = models.SlugField()
-    test_sequences = models.BooleanField(default=True)
-    test_layout = models.BooleanField(default=True)
-    test_layout_elements = TaggableManager()
+    body = models.TextField(blank=True,null=True)
+    is_active = models.BooleanField(default=True)
 
     objects = tree = TreeManager()
 
     class MPTTMeta:
-        order_insertion_by = ['url']
+        order_insertion_by = ['name']
 
     def __unicode__(self):
-        return '%s' % (self.url,)
+        return '%s' % (self.name,)
 
-    @property
-    def is_parent(self):
-        return True if self.parent is None else False
 
-    @property
-    def is_child(self):
-        return True if self.parent is not None else False
+class Sequence(MPTTModel):
+    tests = models.ManyToManyField(SequenceTest, related_name='sequences')
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
+    name = models.CharField(max_length=128, blank=False)
+    is_active = models.BooleanField(default=True)
+
+    objects = tree = TreeManager()
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    def __unicode__(self):
+        return '%s' % (self.name,)
 

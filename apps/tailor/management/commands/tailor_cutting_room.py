@@ -51,30 +51,34 @@ class Command(BaseCommand):
     def delete_page(self, page_ids=None):
         if self.all_pages == True:
             # delete all <page_id> folders in cutting_room
-            print 'delete all'
+            page_ids = []
+            for page in Page.objects.filter(is_active=False).all():
+                page_ids.append(page.pk)
         else:
             # delete specified ids
             if len(page_ids) == 0:
                 raise CommandError('Please specify page_id(s) to delete i.e. manage.py cutting_room --delete <page_id> <page_id> ...')
 
-            for page in page_ids:
-                f = os.path.join(
-                    OUTPUT_PATH,
-                    page
-                    )
+        for page in page_ids:
+            f = os.path.join(
+                OUTPUT_PATH,
+                page
+                )
 
-                if os.path.exists(f):
-                    shutil.rmtree(f)
-                    print "Deleted %s" % f
-                else:
-                    print "Does not exist: %s" % f
+            if os.path.exists(f):
+                shutil.rmtree(f)
+                print "Deleted %s" % f
+            else:
+                print "Does not exist: %s" % f
 
     def clean_up(self):
         delete_ids = []
+
         for page in Page.objects.filter(is_active=False).all():
             delete_ids.append(page.pk)
+
         if len(delete_ids) > 0:
             self.delete_page(delete_ids)
         else:
-            raise CommandError('No Pages are InActive and thus there is nothing to clean_up')
+            raise CommandError('No Pages are In-active and thus there is nothing to clean_up')
 

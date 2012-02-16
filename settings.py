@@ -132,6 +132,7 @@ INSTALLED_APPS = (
 
     'apps.tailor',
     'apps.page',
+    'apps.sequence',
 )
 
 # A sample logging configuration. The only tangible logging

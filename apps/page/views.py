@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.encoding import smart_unicode
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template.context import RequestContext
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
@@ -18,6 +18,7 @@ from util import Sitemap
 
 import urllib2
 import urlparse
+
 
 @login_required
 def admin_sitemap_import(request):
@@ -56,7 +57,11 @@ def admin_sitemap_import(request):
 def admin_load_page_url(request, page_id):
 
     page = get_object_or_404(Page, pk=page_id)
-    response = urllib2.urlopen(page.url)
+    try:
+        response = urllib2.urlopen(page.url)
+    except urllib2.URLError:
+        raise Http404('Url "%s" is not available. Please check internet connection' % page.url)
+
     url = urlparse.urlparse(page.url)
     remote_html = smart_unicode(response.read())
     replace = '="%s://%s/' % (url.scheme,url.hostname,)

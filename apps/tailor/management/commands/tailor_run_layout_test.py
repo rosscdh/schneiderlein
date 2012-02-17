@@ -1,4 +1,7 @@
 import os
+import simplejson as json
+from datetime import datetime
+import time
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.template.defaultfilters import slugify
@@ -11,6 +14,9 @@ from apps.page.models import Page
 
 NEEDLE_TOLERANCE  = 2.5#getattr(settings, 'NEEDLE_TOLERANCE', 0.5)
 OUTPUT_PATH = getattr(settings, 'NEEDLE_OUTPUT_PATH', os.path.abspath('./cutting_room/') + '/')
+
+today = datetime.today()
+now = time.time()
 
 
 class Command(BaseCommand):
@@ -94,12 +100,13 @@ class Command(BaseCommand):
                 for b in blocks:
                     c = c + 1
                     element_name = '%s-%02d' % (e_name, c,)
-                    #try:
-                    self.needle.assertScreenshot(b, element_name, NEEDLE_TOLERANCE)
-                    #except AssertionError:
-                    #    self.log_error(page, element_name)
+                    try:
+                        self.needle.assertScreenshot(b, element_name, NEEDLE_TOLERANCE)
+                    except AssertionError as error:
+                        self.log_error(page, element_name, error)
             else:
                 self.stdout.write('No Blocks Found for element "%s"\n' % e)
 
-    def log_error(self, page, element):
+    def log_error(self, page, element, error):
         pass
+        

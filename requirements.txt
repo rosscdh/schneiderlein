@@ -13,4 +13,4 @@ PIL
 selenium
 nose
 unittest2
-
+simplejson

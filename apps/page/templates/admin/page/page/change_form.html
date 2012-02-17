@@ -7,52 +7,44 @@
 	{% else %}
 		<h2>Page Tests</h2>
 		<!-- Implement jquery tabs -->
-		<div id="tabs">
-		<ul>
-			<li><a href="#tabs-1">Page Elements</a></li>
-			<li><a href="#tabs-2">Layout</a></li>
-			<li><a href="#tabs-3">Build Results</a></li>
-		</ul>
-		</div>
-
-		<!-- Test sequences -->
-		<div id="tabs-1" class="module aligned">
-			<h3>Page Elements</h3>
-			<p>Here the user is able to select and add to a sequence of cucumber tests that will be run against this page.</p>
-			<p>This will allow the page to be tested for the presence of specific html and general functionality</p>
-		</div>
-
-		<!-- Test Elements -->
-		<div id="tabs-2" class="clear">
-			<h3>Layout</h3>
-			<ul class="object-tools">
-				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
+		<div id="tabs" class="clear">
+			<ul>
+				<li><a href="#tabs-1">Layout & Page Elements</a></li>
+				<li><a href="#tabs-2">Builds</a></li>
 			</ul>
-			<div class="module">
-				<p>Using the clickable interface below, select page elements to test for layout and color consistency.</p>
-				<p>By default, the entire page will be tested for layout and consistency, however the little tailor enables you to test individual page elements.</p>
-				<iframe class="module aligned float-right" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
-				<ul id="selected_elements" class="float-left"></ul>
+
+			<!-- Layout & Page Elements -->
+			<div id="tabs-1" class="clear">
+				<h3>Layout & Page Elements</h3>
+				<ul class="object-tools">
+					<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
+				</ul>
+				<div class="module clear">
+					<p>Using the clickable interface below, select page elements to test for layout and color consistency.</p>
+					<p>By default, the entire page will be tested for layout and consistency, however the little tailor enables you to test individual page elements.</p>
+					<iframe class="module aligned float-right" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
+					<ul id="selected_elements" class="float-left">
+					</ul>
+				</div>
 			</div>
-		</div>
 
 
-		<!-- Build Results -->
-		<div id="tabs-3" class="clear">
-			<h3>Build Results</h3>
-			<ul class="object-tools">
-			<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Build now</a></li>
-			</ul>
-			<div class="module">
-			<p>Here the user is able to view previous build results, as well as schedule a new build to run now.</p>
-			<p>A navigable list of build logs [datetime, build_result, build_thumbnail]</p>
-			<p>The list rows are clickable and when clicked will show a modal window with the selected build log as well as a larger version of the build_thumbnail</p>
-			<p>build_thumbnail == a dual screenshot of the result_thumbnail next to the baseline_thumbnail, for historical comparison</p>
+			<!-- Build Results -->
+			<div id="tabs-2" class="clear">
+				<h3>Builds</h3>
+				<ul class="object-tools">
+				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Build now</a></li>
+				</ul>
+				<div class="module">
+				<p>Here the user is able to view previous build results, as well as schedule a new build to run now.</p>
+				<p>A navigable list of build logs [datetime, build_result, build_thumbnail]</p>
+				<p>The list rows are clickable and when clicked will show a modal window with the selected build log as well as a larger version of the build_thumbnail</p>
+				<p>build_thumbnail == a dual screenshot of the result_thumbnail next to the baseline_thumbnail, for historical comparison</p>
+				</div>
 			</div>
-		</div>
 
-
-	
+		</div><!-- End #tabs -->
+		<div class="clear">&nbsp;</div>
 		<style>
 		#overview_target{
 			width:70%;
@@ -80,19 +72,18 @@
 
 		</style>
 
-		<script>(function($){jQuery = $.noConflict(true);})(django.jQuery);</script>
-		<script type="text/javascript" src="http://cdn.jquerytools.org/1.2.5/jquery.tools.min.js"></script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
 		<script type="text/javascript">
 		(function($) {
 	    $(document).ready(function($) {
 
-			// $.getScript("http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js").done(function(script, textStatus) {
-			//   $( "#tabs" ).tabs();
-			// })
-
-
 			target_div = $('div#overview_page');
+
+			$.fn.addLiToTestElementList = function(css_xpath){
+				$('ul#selected_elements').append('<li class="module">'+ css_xpath +'&nbsp;<a class="list_remove" data-css_path="'+ css_xpath +'" href="#" title="Remove"><strong>x</strong></a></li>');
+			};
+
+			// append html by default **will need to modify this process when implementing test elements from database**
+			$(this).addLiToTestElementList('html')
 
 			$('#overview_target').load(function(){
 				var $c = $('#overview_target').contents();
@@ -128,8 +119,10 @@
 							}
 			        });
 					css_xpath = path.reverse().join(" ");
+
 					// append li item to list
-					$('ul#selected_elements').append('<li class="module">'+ css_xpath +'&nbsp;<a class="list_remove" data-css_path="'+ css_xpath +'" href="#" title="Remove"><strong>x</strong></a></li>');
+					$(this).addLiToTestElementList(css_xpath)
+
 			        return false;
 				});
 
@@ -150,6 +143,15 @@
 
 			});
 
+		});
+		})(django.jQuery);
+		</script>
+		<script type="text/javascript">(function($){jQuery = $.noConflict(true);})(django.jQuery);</script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+		<script type="text/javascript">
+		(function($) {
+		$(document).ready(function($) {
+			$( "div#tabs" ).tabs();
 		});
 		})(django.jQuery);
 		</script>

@@ -29,8 +29,8 @@
 				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
 			</ul>
 			<div class="module aligned">
-				<p>Here you are able to set your test build to test individual page elements.</p>
-				<p>If no elements are selected, then a screenshot of the html element is taken and is tested against.</p>
+				<p>Using the clickable interface below, select page elements to test for layout and color consistency.</p>
+				<p>By default, the entire page will be tested for layout and consistency, however the little tailor enables you to test individual page elements.</p>
 				<iframe class="module aligned float-right" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
 				<ul id="selected_elements" class="float-left"></ul>
 			</div>

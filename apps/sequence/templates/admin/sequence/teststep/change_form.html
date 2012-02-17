@@ -1,0 +1,15 @@
+{% extends "admin/change_form.html" %}
+
+{% block after_field_sets %}
+<div id="tabs-1" class="module aligned">
+	<h3>Available Step Templates</h3>
+	<p>Select 1 or more step templates to make part of this Step.</p>
+	<ul class="step-templates">
+		{% for template in original.step_templates %}
+		<li><a class="ajax" data-ajax_target="#id_body" href="">{{ template }}</a></li>
+		{% empty %}
+		<li>No Step Templates found</li>
+		{% endfor %}
+	</ul>
+</div>
+{% endblock %}

@@ -1,16 +1,16 @@
 from django.contrib import admin
 from django.conf.urls.defaults import *
-from models import Sequence, SequenceTest
+from models import Sequence, TestStep, StepTemplate
 
-class SequenceTestInline(admin.TabularInline):
+class TestStepInline(admin.TabularInline):
     model = Sequence.tests.through
 
 
 class SequenceAdmin(admin.ModelAdmin):
     inlines = [
-        SequenceTestInline,
+        TestStepInline,
     ]
     exclude = ('tests',)
 
 admin.site.register(Sequence, SequenceAdmin)
-admin.site.register([SequenceTest])
+admin.site.register([TestStep, StepTemplate])

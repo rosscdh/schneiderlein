@@ -23,7 +23,7 @@
 		</div>
 
 		<!-- Test Elements -->
-		<div id="tabs-2">
+		<div id="tabs-2" class="clear">
 			<h3>Test Elements</h3>
 			<ul class="object-tools">
 				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
@@ -31,15 +31,14 @@
 			<div class="module aligned">
 				<p>Here you are able to set your test build to test individual page elements.</p>
 				<p>If no elements are selected, then a screenshot of the html element is taken and is tested against.</p>
-				<iframe class="module aligned" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
-				<div id="overview_page">&nbsp;</div>
-				<ul id="selected_elements"></ul>
+				<iframe class="module aligned float-right" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
+				<ul id="selected_elements" class="float-left"></ul>
 			</div>
 		</div>
 
 
 		<!-- Build Results -->
-		<div id="tabs-3">
+		<div id="tabs-3" class="clear">
 			<h3>Build Results</h3>
 			<ul class="object-tools">
 			<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Build now</a></li>
@@ -117,13 +116,15 @@
 							}
 			        });
 					css_xpath = path.reverse().join(" ");
+					// append li item to list
 					$('ul#selected_elements').append('<li>'+ css_xpath +'&nbsp;<a class="list_remove" data-css_path="'+ css_xpath +'" href="#" title="Remove"><strong>x</strong></a></li>');
 			        return false;
 				});
 
 				$('li a.list_remove').live('click', function(event) {
 					event.preventDefault();
-					//alert($(this).attr('data-css_path'))
+					css_path = $(this).attr('data-css_path');
+					$c.find(css_path).css('border', '')
 					$(this).parent().remove();// remove the containing LI
 				});
 				$('ul#selected_elements li').live('mouseover', function(event) {

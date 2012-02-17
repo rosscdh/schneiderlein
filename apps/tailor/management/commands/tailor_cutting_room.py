@@ -16,6 +16,11 @@ class Command(BaseCommand):
     args = '<page_id page_id ...>'
     help = 'Manage the Cuttingroom Floor: --delete'
     option_list = BaseCommand.option_list + (
+        make_option('--initialize',
+            action='store_true',
+            dest='initialize',
+            default=False,
+            help='Specify the command to run'),
         make_option('--delete',
             action='store_true',
             dest='delete',
@@ -39,14 +44,28 @@ class Command(BaseCommand):
 
         self.all_pages = options['all_pages']
 
+        if options['initialize'] != False:
+            self.initialize(args)
         if options['delete'] != False:
             self.delete_page(args)
         if options['clean_up'] != False:
             self.clean_up()
 
         #inspect.ismethod(inst1.f1)
-    def initialize(self):
-        pass
+    def initialize(self, page_ids):
+        for page_id in page_ids:
+            f = os.path.join(
+                OUTPUT_PATH,
+                page_id
+                )
+            fail_path = os.path.join(
+                f,
+                'fail'
+                )
+            paths = [f, fail_path]
+            for p in paths:
+                if not os.path.exists(p):
+                    os.makedirs(p)
 
     def delete_page(self, page_ids=None):
         if self.all_pages == True:

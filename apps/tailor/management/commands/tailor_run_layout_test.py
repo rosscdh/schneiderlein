@@ -2,13 +2,16 @@ import os
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.template.defaultfilters import slugify
+from django.core.management import call_command
+
 from optparse import make_option
 from needle.spindle import Spindle
 
 from apps.page.models import Page
 
 NEEDLE_TOLERANCE  = 2.5#getattr(settings, 'NEEDLE_TOLERANCE', 0.5)
-OUTPUT_PATH = getattr(settings, 'NEEDLE_OUTPUT_PATH', './cutting_room/')
+OUTPUT_PATH = getattr(settings, 'NEEDLE_OUTPUT_PATH', os.path.abspath('./cutting_room/') + '/')
+
 
 class Command(BaseCommand):
     args = '<page_id page_id ...>'
@@ -19,7 +22,7 @@ class Command(BaseCommand):
             dest='all_pages',
             default=False,
             help='Test All Pages'),
-        make_option('--generate-base-screenshot',
+        make_option('--generate',
             action='store_true',
             dest='generate_screenshot',
             default=False,
@@ -51,15 +54,22 @@ class Command(BaseCommand):
 
                 self.test_page(page.url, page.test_layout_elements.all(), page=page)
 
-    def test_page(self, url, elements=None, page=None):
+    def test_page(self, url, elements_list=None, page=None):
         """ selenium test the url using needle """
 
-        if not elements or len(elements) == 0:
+        # init page path if not exists
+        call_command('tailor_cutting_room', str(page.pk), initialize=True)
+
+        elements = []
+        if not elements_list or len(elements_list) == 0:
             self.stdout.write('No Elements Found for "%s" (%d): Using default\n' % (url,page.pk,))
-            elements = ['html']
+            elements.append('html')
+        else:
+            for e in elements_list:
+                elements.append( e.name.strip() )
 
         # get needle driver url
-        url = 'http://www.sedo.com/us/about-us/careers/our-departments'
+        #url = 'http://www.sedo.com/us/about-us/careers/our-departments'
         self.needle.driver.get( url )
 
         # set needle output path
@@ -84,10 +94,10 @@ class Command(BaseCommand):
                 for b in blocks:
                     c = c + 1
                     element_name = '%s-%02d' % (e_name, c,)
-                    try:
-                        self.needle.assertScreenshot(b, element_name, NEEDLE_TOLERANCE)
-                    except AssertionError:
-                        self.log_error(page, element_name)
+                    #try:
+                    self.needle.assertScreenshot(b, element_name, NEEDLE_TOLERANCE)
+                    #except AssertionError:
+                    #    self.log_error(page, element_name)
             else:
                 self.stdout.write('No Blocks Found for element "%s"\n' % e)
 

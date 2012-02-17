@@ -7,14 +7,17 @@ from apps.sequence.models import Sequence
 
 class SequenceInline(admin.TabularInline):
     model = Page.sequence_tests.through
-    
+
+class StepTestInline(admin.TabularInline):
+    model = Page.step_tests.through
 
 class PageAdmin(admin.ModelAdmin):
     list_display = ('url', 'is_child',)
     inlines = [
         SequenceInline,
+        StepTestInline,
     ]
-    exclude = ('sequence_tests',)
+    exclude = ('sequence_tests','step_tests',)
 
     def get_urls(self):
         urls = super(PageAdmin, self).get_urls()

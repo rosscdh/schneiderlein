@@ -28,7 +28,7 @@
 			<ul class="object-tools">
 				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
 			</ul>
-			<div class="module aligned">
+			<div class="module">
 				<p>Using the clickable interface below, select page elements to test for layout and color consistency.</p>
 				<p>By default, the entire page will be tested for layout and consistency, however the little tailor enables you to test individual page elements.</p>
 				<iframe class="module aligned float-right" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
@@ -43,7 +43,7 @@
 			<ul class="object-tools">
 			<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Build now</a></li>
 			</ul>
-			<div class="module aligned">
+			<div class="module">
 			<p>Here the user is able to view previous build results, as well as schedule a new build to run now.</p>
 			<p>A navigable list of build logs [datetime, build_result, build_thumbnail]</p>
 			<p>The list rows are clickable and when clicked will show a modal window with the selected build log as well as a larger version of the build_thumbnail</p>
@@ -62,10 +62,22 @@
 			border:solid #c00 2px;
 		}
 		a.list_remove{
+			float:right;
+			clear:right;
+			position:relative;
+			right:-25px;
 			border:solid #ccc 1px;
 			background-color:#ddd;
 			padding:2px 4px;
 		}
+		ul#selected_elements{
+			width:300px;
+		}
+		ul#selected_elements li{
+			height:25px;
+			padding:3px 5px;
+		}
+
 		</style>
 
 		<script>(function($){jQuery = $.noConflict(true);})(django.jQuery);</script>
@@ -117,7 +129,7 @@
 			        });
 					css_xpath = path.reverse().join(" ");
 					// append li item to list
-					$('ul#selected_elements').append('<li>'+ css_xpath +'&nbsp;<a class="list_remove" data-css_path="'+ css_xpath +'" href="#" title="Remove"><strong>x</strong></a></li>');
+					$('ul#selected_elements').append('<li class="module">'+ css_xpath +'&nbsp;<a class="list_remove" data-css_path="'+ css_xpath +'" href="#" title="Remove"><strong>x</strong></a></li>');
 			        return false;
 				});
 

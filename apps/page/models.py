@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
 
-from apps.sequence.models import Sequence
+from apps.sequence.models import Sequence, TestStep
 
 from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager
@@ -17,6 +17,7 @@ class Page(MPTTModel):
     test_layout = models.BooleanField(default=True)
     test_layout_elements = TaggableManager()
     sequence_tests = models.ManyToManyField(Sequence, related_name='pages')
+    step_tests = models.ManyToManyField(TestStep, related_name='pages')
 
     is_active = models.BooleanField(default=True)
 

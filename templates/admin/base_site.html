@@ -1,10 +1,17 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ title }} | {% trans 'Das Tupfer Schneiderlein - The brave little Tailor' %}{% endblock %}
+{% block title %}{{ title }} | {% trans 'Das tapfere Schneiderlein - The brave little Tailor' %}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name">{% trans 'Das Tupfer Schneiderlein - The brave little Tailor' %}</h1>
+<h1 id="site-name">{% trans 'Das tapfere Schneiderlein' %}<span id="tag-line" class="mini">{% trans 'The brave little Tailor' %}</span></h1>
+<style>
+	#tag-line{
+		position:absolute;
+		top:2px;
+		left:140px;
+	}
+</style>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}

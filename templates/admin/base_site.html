@@ -12,6 +12,23 @@
 		top:2px;
 		left:140px;
 	}
+
+	* html .clearfix {
+		height: 1%;
+	}
+	.clearfix {
+		display: block;
+	}
+	.clearfix:after {
+		clear: both;
+		content: ' ';
+		display: block;
+		font-size: 0;
+		line-height: 0;
+		visibility: hidden;
+		width: 0;
+		height: 0;
+	}
 </style>
 {% endblock %}
 

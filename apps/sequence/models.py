@@ -14,6 +14,10 @@ class StepTemplate(models.Model):
     body = models.TextField(verbose_name=_('Step Code'), help_text=_('Lettuce Step Syntax'), blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name = _('Step Template')
+        verbose_name_plural = _('Step Templates')
+
 
 class TestStep(MPTTModel):
     """ Provides a set of features to run using lettuce, makes use of the StepTemplates to define its Steps"""
@@ -26,8 +30,8 @@ class TestStep(MPTTModel):
     step_templates = StepTemplate.objects.all()
 
     class Meta:
-        verbose_name = _('Test Step')
-        verbose_name_plural = _('Test Steps')
+        verbose_name = _('Step')
+        verbose_name_plural = _('Steps')
 
     class MPTTMeta:
         order_insertion_by = ['name']

@@ -21,7 +21,7 @@ def start_process(request, process_name):
         if not page_id:
             raise Http404(unicode(_('Please specify at least 1 page_id')))
         generate_screenshot = request.GET.get('generate', False)
-        all_pages = request.GET.get('all', False)
+        all_pages = request.GET.get('all_pages', False)
         call_command('tailor_run_layout_test', str(page_id), generate=generate_screenshot, all=all_pages)
 
     return render_to_response(

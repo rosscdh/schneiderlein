@@ -2,29 +2,29 @@
 
 {% block after_field_sets %}
 	{% if not original %}
-		<h2>No Page Test Elements Available</h2>
+		<h2>Page Tests are not yet Available</h2>
 		<p>Please add a new page and ensure that the url you provide is correct</p>
 	{% else %}
-		<h2>Page Test Elements</h2>
+		<h2>Page Tests</h2>
 		<!-- Implement jquery tabs -->
 		<div id="tabs">
 		<ul>
-			<li><a href="#tabs-1">Test Sequences</a></li>
-			<li><a href="#tabs-2">Test Elements</a></li>
+			<li><a href="#tabs-1">Page Elements</a></li>
+			<li><a href="#tabs-2">Layout</a></li>
 			<li><a href="#tabs-3">Build Results</a></li>
 		</ul>
 		</div>
 
 		<!-- Test sequences -->
 		<div id="tabs-1" class="module aligned">
-			<h3>Test Sequences</h3>
+			<h3>Page Elements</h3>
 			<p>Here the user is able to select and add to a sequence of cucumber tests that will be run against this page.</p>
 			<p>This will allow the page to be tested for the presence of specific html and general functionality</p>
 		</div>
 
 		<!-- Test Elements -->
 		<div id="tabs-2" class="clear">
-			<h3>Test Elements</h3>
+			<h3>Layout</h3>
 			<ul class="object-tools">
 				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
 			</ul>

@@ -14,7 +14,7 @@ class Command(BaseCommand):
     args = '<page_id page_id ...>'
     help = 'Generate screenshots for a list of Page objects'
     option_list = BaseCommand.option_list + (
-        make_option('--all-pages',
+        make_option('--all',
             action='store_true',
             dest='all_pages',
             default=False,

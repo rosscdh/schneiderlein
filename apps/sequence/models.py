@@ -18,6 +18,8 @@ class StepTemplate(models.Model):
         verbose_name = _('Step Template')
         verbose_name_plural = _('Step Templates')
 
+    def __unicode__(self):
+        return '%s' % (self.name,)
 
 class TestStep(MPTTModel):
     """ Provides a set of features to run using lettuce, makes use of the StepTemplates to define its Steps"""
@@ -27,7 +29,7 @@ class TestStep(MPTTModel):
     is_active = models.BooleanField(default=True)
 
     objects = tree = TreeManager()
-    step_templates = StepTemplate.objects.all()
+    step_templates = StepTemplate.objects
 
     class Meta:
         verbose_name = _('Step')

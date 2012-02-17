@@ -5,7 +5,7 @@
 	<h3>Available Step Templates</h3>
 	<p>Select 1 or more step templates to make part of this Step.</p>
 	<ul class="step-templates">
-		{% for template in original.step_templates %}
+		{% for template in original.step_templates.all %}
 		<li><a class="ajax" data-ajax_target="#id_body" href="">{{ template }}</a></li>
 		{% empty %}
 		<li>No Step Templates found</li>

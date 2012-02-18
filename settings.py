@@ -143,13 +143,22 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'tailor_process': {                # define and name a handler
-            'level': 'DEBUG',
+#            'level': 'DEBUG',
+            'formatter': 'verbose',
             'class': 'logging.FileHandler', # set the logging class to log to a file
             'filename': os.path.join(PROJECT_DIR, 'log', 'tailor_process.log') # log file
         },
@@ -160,7 +169,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'tailor.process': {              # define a logger - give it a name
+        'tailor.workshop': {              # define a logger - give it a name
             'handlers': ['tailor_process'], # specify what handler to associate
             'level': 'DEBUG',                 # specify the logging level
             'propagate': True,

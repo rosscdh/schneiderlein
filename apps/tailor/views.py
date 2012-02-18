@@ -23,7 +23,7 @@ def start_process(request, process_name):
         if not page_id and not all_pages:
             raise Http404(unicode(_('Please specify at least 1 page_id')))
 
-        call_command('tailor_run_layout_test', str(page_id), generate=True, all=all_pages)
+        call_command('tailor_run_layout_test', str(page_id), generate=generate_screenshot, all=all_pages)
 
     return render_to_response(
         'admin/tailor/process_log.html', {

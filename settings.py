@@ -147,12 +147,22 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'tailor_process': {                # define and name a handler
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler', # set the logging class to log to a file
+            'filename': os.path.join(PROJECT_DIR, 'log', 'tailor_process.log') # log file
+        },
     },
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        'tailor.process': {              # define a logger - give it a name
+            'handlers': ['tailor_process'], # specify what handler to associate
+            'level': 'DEBUG',                 # specify the logging level
             'propagate': True,
         },
     }

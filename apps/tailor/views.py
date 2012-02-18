@@ -17,12 +17,13 @@ from django.core.management import call_command
 def start_process(request, process_name):
 
     if process_name == 'tailor_run_layout_test':
+        all_pages = True if 'all_pages' in request.GET else False
+        generate_screenshot = True if 'generate' in request.GET else False
         page_id = request.GET.get('page_id', None)
-        if not page_id:
+        if not page_id and not all_pages:
             raise Http404(unicode(_('Please specify at least 1 page_id')))
-        generate_screenshot = request.GET.get('generate', False)
-        all_pages = request.GET.get('all_pages', False)
-        call_command('tailor_run_layout_test', str(page_id), generate=generate_screenshot, all=all_pages)
+
+        call_command('tailor_run_layout_test', str(page_id), generate=str(generate_screenshot), all=all_pages)
 
     return render_to_response(
         'admin/tailor/process_log.html', {

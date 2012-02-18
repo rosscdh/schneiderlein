@@ -3,7 +3,6 @@ South
 Werkzeug
 django-debug-toolbar
 django-extensions
-lettuce
 django-mptt
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 -e git+https://github.com/stard0g101/needle.git#egg=needle

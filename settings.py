@@ -128,7 +128,6 @@ INSTALLED_APPS = (
 
     'mptt',
 
-    'lettuce.django',
 	'taggit',
 
     'apps.tailor',

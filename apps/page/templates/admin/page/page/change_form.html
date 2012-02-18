@@ -17,7 +17,7 @@
 			<div id="tabs-1" class="clear">
 				<h3>Layout & Page Elements</h3>
 				<ul class="object-tools">
-					<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Refresh Layout</a></li>
+				    <li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="{% url tailor-start_process process_name='tailor_run_layout_test' %}?page_id={{ original.pk }}&generate=true">Set as Baseline</a></li>
 				</ul>
 				<div class="module clear">
 					<p>Using the clickable interface below, select page elements to test for layout and color consistency.</p>
@@ -33,7 +33,7 @@
 			<div id="tabs-2" class="clear">
 				<h3>Builds</h3>
 				<ul class="object-tools">
-				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="#">Build now</a></li>
+				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="{% url tailor-start_process process_name='tailor_run_layout_test' %}?page_id={{ original.pk }}">Build now</a></li>
 				</ul>
 				<div class="module">
 				<p>Here the user is able to view previous build results, as well as schedule a new build to run now.</p>

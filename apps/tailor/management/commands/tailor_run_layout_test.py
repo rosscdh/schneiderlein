@@ -2,6 +2,7 @@ import os
 import simplejson as json
 from datetime import datetime
 import time
+import logging
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.template.defaultfilters import slugify
@@ -15,6 +16,7 @@ from apps.page.models import Page
 NEEDLE_TOLERANCE  = 2.5#getattr(settings, 'NEEDLE_TOLERANCE', 0.5)
 OUTPUT_PATH = getattr(settings, 'NEEDLE_OUTPUT_PATH', os.path.abspath('./cutting_room/') + '/')
 
+logger = logging.getLogger(__name__)
 today = datetime.today()
 now = time.time()
 
@@ -24,12 +26,14 @@ class Command(BaseCommand):
     help = 'Generate screenshots for a list of Page objects'
     option_list = BaseCommand.option_list + (
         make_option('--all',
-            action='store_true',
+            action='store',
+            type='string',
             dest='all_pages',
             default=False,
             help='Test All Pages'),
         make_option('--generate',
-            action='store_true',
+            action='store',
+            type='string',
             dest='generate_screenshot',
             default=False,
             help='Generate a baseline screenshot for future comparison tests'),
@@ -40,7 +44,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         generate_screenshot = options['generate_screenshot']
+        logger.debug('generate_screenshot: %s' % generate_screenshot)
         all_pages = options['all_pages']
+        logger.debug('all_pages: %s' % all_pages)
 
         if all_pages == False and len(args) == 0:
             raise CommandError('Please specify page_id(s) to test in form: tailor_page_url <id> <id> <id> ...')

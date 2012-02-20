@@ -11,8 +11,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from models import Page
+from needle.spindle import Spindle
 
+from models import Page
 from forms import ImportSitemapUrlForm, ImportSitemapFileForm
 from util import Sitemap
 
@@ -37,7 +38,6 @@ def admin_sitemap_import(request):
             form = ImportSitemapFileForm(request.POST, request.FILES)
             if form.is_valid():
                 form.handle_uploaded_file(request.FILES['sitemap_file'])
-                #local_sitemap_url = '%s%s%s' % ('http://' if not request.is_secure() else 'https://', request.get_host(), form.get_absolute_url(), )
                 UploadedSiteMap = Sitemap('/tmp/sitemap.xml')
 
         if UploadedSiteMap is not None:
@@ -55,15 +55,17 @@ def admin_sitemap_import(request):
 
 @login_required
 def admin_load_page_url(request, page_id):
-
     page = get_object_or_404(Page, pk=page_id)
+
+    needle = Spindle(capture=False, output_path='/tmp/')
     try:
-        response = urllib2.urlopen(page.url)
-    except urllib2.URLError:
-        raise Http404('Url "%s" is not available. Please check internet connection' % page.url)
+      response = needle.getPageHTML(page.url)
+    except:
+      raise Http404('Url "%s" is not available. Please check internet connection and that selenium server is running (tailor_start)' % page.url)
 
     url = urlparse.urlparse(page.url)
-    remote_html = smart_unicode(response.read())
+    remote_html = smart_unicode(response)
+
     replace = '="%s://%s/' % (url.scheme,url.hostname,)
     remote_html = remote_html.replace('="/', replace)
 

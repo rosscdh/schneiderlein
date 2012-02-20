@@ -41,12 +41,14 @@ class Command(BaseCommand):
     needle = None
 
     def handle(self, *args, **options):
+        self.build_id = 'build-%s' % now
 
         generate_screenshot = True if options['generate'] in ['True',True] else False
         all_pages = True if options['all'] in ['True',True] else False
 
         num_pages_ids = len(args)
         logger.debug('num num_pages_ids %d' % num_pages_ids)
+
         if all_pages in ['False',False] and num_pages_ids == 0:
             raise CommandError('Please specify page_id(s) to test in form: tailor_page_url <id> <id> <id> ...')
 

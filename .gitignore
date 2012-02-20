@@ -6,5 +6,5 @@
 ._*
 .DS_Store
 apps/tailor/management/commands/*.png
-cutting_room/
-log/
+cutting_room/*
+log/*

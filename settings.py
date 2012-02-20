@@ -157,10 +157,11 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'tailor_process': {                # define and name a handler
-#            'level': 'DEBUG',
+            'level': 'DEBUG',
             'formatter': 'verbose',
-            'class': 'logging.FileHandler', # set the logging class to log to a file
-            'filename': os.path.join(PROJECT_DIR, 'log', 'tailor_process.log') # log file
+#            'class': 'logging.FileHandler', # set the logging class to log to a file
+            'class': 'apps.tailor.handlers.BuildHandler',
+#            'filename': os.path.join(PROJECT_DIR, 'log', 'tailor_process.log') # log file
         },
     },
     'loggers': {

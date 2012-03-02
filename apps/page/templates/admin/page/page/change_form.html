@@ -23,8 +23,7 @@
 					<p>Using the clickable interface below, select page elements to test for layout and color consistency.</p>
 					<p>By default, the entire page will be tested for layout and consistency, however the little tailor enables you to test individual page elements.</p>
 					<iframe class="module aligned float-right" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
-					<ul id="selected_elements" class="float-left">
-					</ul>
+					<ul id="selected_elements" class="float-left"></ul>
 				</div>
 			</div>
 
@@ -77,13 +76,27 @@
 	    $(document).ready(function($) {
 
 			target_div = $('div#overview_page');
+			var testable_element_id = 'id_testable_elements';
+			var testable_element = $('#'+testable_element_id);
+
+			if (testable_element.length <= 0){
+			    $('form#page_form').prepend('<input type="hidden" id="'+testable_element_id+'" name="'+testable_element_id.replace('id_','')+'" value=""/>')
+			    testable_element = $('#'+testable_element_id);
+		    }
 
 			$.fn.addLiToTestElementList = function(css_xpath){
 				$('ul#selected_elements').append('<li class="module">'+ css_xpath +'&nbsp;<a class="list_remove" data-css_path="'+ css_xpath +'" href="#" title="Remove"><strong>x</strong></a></li>');
+				testable_elements = testable_element.val().split(',');
+				testable_elements.push(css_xpath);
+				testable_element.val(testable_elements);
 			};
 
 			// append html by default **will need to modify this process when implementing test elements from database**
-			$(this).addLiToTestElementList('html')
+            {% for e in original.get_test_elements %}
+			$(this).addLiToTestElementList('{{ e }}');
+            {% empty %}
+			$(this).addLiToTestElementList('html');
+            {% endfor %}
 
 			$('#overview_target').load(function(){
 				var $c = $('#overview_target').contents();
@@ -130,6 +143,10 @@
 					event.preventDefault();
 					css_path = $(this).attr('data-css_path');
 					$c.find(css_path).css('border', '')
+
+					testable_elements = testable_element.val().split(',');
+					testable_elements.splice( $.inArray(css_path, testable_elements), 1 );
+					testable_element.val(testable_elements) 
 					$(this).parent().remove();// remove the containing LI
 				});
 				$('ul#selected_elements li').live('mouseover', function(event) {

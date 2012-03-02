@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from taggit.managers import TaggableManager
 
 from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager

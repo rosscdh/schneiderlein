@@ -57,7 +57,7 @@ class Command(BaseCommand):
         if all_pages == True:
             args = []
             for page in Page.objects.all():
-                self.test_page(url=page.url, elements_list=page.test_layout_elements.all(), page=page)
+                self.test_page(url=page.url, elements_list=page.get_test_elements(), page=page)
         else:
             for page_id in args:
                 try:
@@ -65,11 +65,11 @@ class Command(BaseCommand):
                 except Page.DoesNotExist:
                     raise CommandError('Page "%s" does not exist' % page_id)
 
-                self.test_page(url=page.url, elements_list=page.test_layout_elements.all(), page=page)
+                self.test_page(url=page.url, elements_list=page.get_test_elements(), page=page)
+
 
     def test_page(self, url, elements_list=None, page=None):
         """ selenium test the url using needle """
-
         # init page path if not exists
         call_command('tailor_cutting_room', str(page.pk), initialize=True)
 
@@ -83,7 +83,7 @@ class Command(BaseCommand):
             elements.append('html')
         else:
             for e in elements_list:
-                e = e.name.strip()
+                e = e.strip()
                 logger.debug('Require Element: %s' % e)
                 elements.append( e )
 

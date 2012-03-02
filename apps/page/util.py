@@ -2,6 +2,7 @@ import os
 import untangle
 import urlparse
 from django.template.defaultfilters import slugify
+
 from models import Page
 
 
@@ -68,3 +69,5 @@ class Sitemap(object):
 
                 if is_created == False:
                     child.save()
+
+

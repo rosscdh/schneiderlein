@@ -1,23 +1,39 @@
+# -*- coding: UTF-8 -*-
 from django.contrib import admin
 from django.conf.urls.defaults import *
-from models import Page
-from views import admin_sitemap_import
 
 from apps.sequence.models import Sequence
 
-class SequenceInline(admin.TabularInline):
-    model = Page.sequence_tests.through
+from models import Page
+from views import admin_sitemap_import
 
-class StepTestInline(admin.TabularInline):
-    model = Page.step_tests.through
+
+# class SequenceInline(admin.TabularInline):
+#     model = Page.sequence_tests.through
+# 
+# class StepTestInline(admin.TabularInline):
+#     model = Page.step_tests.through
 
 class PageAdmin(admin.ModelAdmin):
     list_display = ('url', 'is_child',)
-    inlines = [
-        SequenceInline,
-        StepTestInline,
-    ]
-    exclude = ('sequence_tests','step_tests',)
+    exclude = ('testable_elements',)
+    # inlines = [
+    #     SequenceInline,
+    #     StepTestInline,
+    # ]
+    #exclude = ('sequence_tests','step_tests',)
+
+    def save_model(self, request, obj, form, change):
+        """ Here is where we will process the testable_elements
+        in our page and then remove them from the fieldset"""
+        if 'testable_elements' in request.POST:
+            obj.reset_test_elements()
+            # process the testable elements
+            for e in request.POST.get('testable_elements').split(','):
+                if e:
+                    obj.add_test_element(e)
+
+        return super(PageAdmin,self).save_model(request, obj, form, change)
 
     def get_urls(self):
         urls = super(PageAdmin, self).get_urls()

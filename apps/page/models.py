@@ -8,17 +8,14 @@ from apps.sequence.models import Sequence, TestStep
 from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager
 
+from fields import JsonListField
+
 
 class Page(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
     url = models.URLField()
     slug = models.SlugField()
-    test_sequences = models.BooleanField(default=True, verbose_name=_('Page Element tests'), help_text=_('Run the Page Element Tests'))
-    test_layout = models.BooleanField(default=True, verbose_name=_('Layout tests'), help_text=_('Run the Layout Tests'))
-    test_layout_elements = TaggableManager()
-    sequence_tests = models.ManyToManyField(Sequence, related_name='pages')
-    step_tests = models.ManyToManyField(TestStep, related_name='pages')
-
+    testable_elements = JsonListField(null=True,blank=True)
     is_active = models.BooleanField(default=True)
 
     objects = tree = TreeManager()
@@ -37,3 +34,28 @@ class Page(MPTTModel):
     def is_child(self):
         return True if self.parent is not None else False
 
+    def get_test_elements(self):
+        if not self.testable_elements or not 'elements' in self.testable_elements:
+            return None
+        else:
+            return self.testable_elements['elements']
+
+    def reset_test_elements(self):
+        self.testable_elements = None
+        return self.testable_elements
+
+    def add_test_element(self,value):
+        if not self.testable_elements or not 'elements' in self.testable_elements:
+            self.testable_elements = dict({'elements':[]})
+
+        if value not in self.testable_elements['elements']:
+            self.testable_elements['elements'].append(value)
+
+        return self.testable_elements['elements']
+
+    def del_test_element(self,value):
+        if 'elements' in self.testable_elements:
+            if value in self.testable_elements['elements']:
+                self.testable_elements['elements'].remove(value)
+
+        return self.testable_elements['elements']

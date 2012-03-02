@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.cache import cache_page
 
 from needle.spindle import Spindle
 
@@ -54,6 +55,7 @@ def admin_sitemap_import(request):
     )
 
 @login_required
+@cache_page(60 * 15)
 def admin_load_page_url(request, page_id):
     page = get_object_or_404(Page, pk=page_id)
 

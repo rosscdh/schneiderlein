@@ -5,6 +5,7 @@
 :2e_*
 ._*
 .DS_Store
+local_settings.py
 apps/tailor/management/commands/*.png
 cutting_room/*
 log/*

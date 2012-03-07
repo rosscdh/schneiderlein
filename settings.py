@@ -152,35 +152,40 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(message)s'
+            'format': '%(levelname)s %(message)s %(page)s'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
     },
     'handlers': {
+        'tailor_cuttingroom': {                # define and name a handler
+            'level': 'DEBUG',
+            'formatter': 'verbose',
+            'class': 'apps.tailor.handlers.CuttingRoomHandler',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'tailor_process': {                # define and name a handler
-            'level': 'DEBUG',
-            'formatter': 'verbose',
-#            'class': 'logging.FileHandler', # set the logging class to log to a file
-            'class': 'apps.tailor.handlers.BuildHandler',
-#            'filename': os.path.join(PROJECT_DIR, 'log', 'tailor_process.log') # log file
-        },
     },
     'loggers': {
+        'tailor_cuttingroom': {              # define a logger - give it a name
+            'handlers': ['tailor_cuttingroom'], # specify what handler to associate
+            'level': 'DEBUG',                 # specify the logging level
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
         },
-        'tailor.workshop': {              # define a logger - give it a name
-            'handlers': ['tailor_process'], # specify what handler to associate
-            'level': 'DEBUG',                 # specify the logging level
-            'propagate': True,
-        },
     }
 }
+
+# Include local_settings.py for local overrides
+try:
+    from local_settings import *
+except ImportError:
+    pass
+

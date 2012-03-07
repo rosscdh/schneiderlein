@@ -38,7 +38,7 @@ class JSONField(models.TextField):
 # rules for South migrations tool (for version >= 0.7)
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^apps\.page\.util\.JSONField"])
+    add_introspection_rules([], ["^apps\.page\.fields\.JSONField"])
 except ImportError:
     pass
 

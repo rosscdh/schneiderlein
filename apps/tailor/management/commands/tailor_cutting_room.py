@@ -12,6 +12,9 @@ from apps.page.models import Page
 NEEDLE_TOLERANCE  = 2.5#getattr(settings, 'NEEDLE_TOLERANCE', 0.5)
 OUTPUT_PATH = getattr(settings, 'NEEDLE_OUTPUT_PATH', './cutting_room/')
 
+import logging
+logger = logging.getLogger('tailor_cuttingroom')
+
 
 class Command(BaseCommand):
     args = '<page_id page_id ...>'

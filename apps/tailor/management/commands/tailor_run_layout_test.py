@@ -1,23 +1,25 @@
 import os
+import thread
+import time
+import logging
+from datetime import datetime
 import simplejson as json
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.template.defaultfilters import slugify
 from django.core.management import call_command
-
 from optparse import make_option
 from needle.spindle import Spindle
-
 from apps.page.models import Page
+from apps.tailor import signals
+
+
 
 NEEDLE_TOLERANCE  = 2.5#getattr(settings, 'NEEDLE_TOLERANCE', 0.5)
 OUTPUT_PATH = getattr(settings, 'NEEDLE_OUTPUT_PATH', os.path.abspath('./cutting_room/') + '/')
 
-import logging
-logger = logging.getLogger('tailor.workshop')
+logger = logging.getLogger('tailor_cuttingroom')
 
-from datetime import datetime
-import time
 today = datetime.today()
 now = time.time()
 
@@ -50,7 +52,7 @@ class Command(BaseCommand):
         logger.debug('num num_pages_ids %d' % num_pages_ids)
 
         if all_pages in ['False',False] and num_pages_ids == 0:
-            raise CommandError('Please specify page_id(s) to test in form: tailor_page_url <id> <id> <id> ...')
+            raise CommandError('Please specify page_id(s) to test in form: tailor_run_layout_test <id> <id> <id> ...')
 
         self.needle = Spindle(capture=generate_screenshot, output_path=OUTPUT_PATH)
 
@@ -66,6 +68,10 @@ class Command(BaseCommand):
                     raise CommandError('Page "%s" does not exist' % page_id)
 
                 self.test_page(url=page.url, elements_list=page.get_test_elements(), page=page)
+
+        # send the end signal
+        signals.build_item_complete.send(sender=self, thread=thread.get_ident())
+
 
 
     def test_page(self, url, elements_list=None, page=None):
@@ -105,7 +111,7 @@ class Command(BaseCommand):
             blocks = self.needle.driver.find_elements_by_css_selector( e )
 
             num_blocks = len(blocks)
-            logger.info('%d Blocks Found for element "%s"\n' % (num_blocks, e,))
+            logger.info('%d Blocks Found for element "%s"\n' % (num_blocks, e,), extra={'page': page, 'element': e})
 
             if num_blocks > 0:
                 for b in blocks:

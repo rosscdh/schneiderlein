@@ -45,6 +45,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.build_id = 'build-%s' % now
 
+        # send the end signal
+        signals.build_item_commence.send(sender=self, thread=thread.get_ident())
+
         generate_screenshot = True if options['generate'] in ['True',True] else False
         all_pages = True if options['all'] in ['True',True] else False
 

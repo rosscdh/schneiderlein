@@ -8,7 +8,12 @@ from django.core.signals import request_finished
 class CuttingRoomHandler(logging.Handler): # Inherit from logging.Handler
     def emit(self, record):
         from apps.tailor.models import CuttingRoomLog
-        log, created = CuttingRoomLog.objects.get_or_create(thread=record.__dict__['thread'], defaults={'build_status': CuttingRoomLog.BS_INPROGRESS})
+
+        thread_id = record.__dict__['thread']
+
+        log, created = CuttingRoomLog.objects.get_or_create(thread=thread_id, defaults={'build_status': CuttingRoomLog.BS_INPROGRESS})
+
+        # set the page only if it is specified and has not already been set
         if 'page' in record.__dict__ and (created or not log.page):
             log.page = record.__dict__['page']
 

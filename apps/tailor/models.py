@@ -1,6 +1,5 @@
 from django.db import models
 import datetime
-from dateutil import relativedelta
 from apps.page.models import Page
 from apps.page.fields import JsonListField
 from apps.tailor.signals import build_item_commence, build_item_complete
@@ -29,8 +28,29 @@ class CuttingRoomLog(models.Model):
     body = JsonListField(null=True, blank=True)
     build_status = models.IntegerField(choices=BUILD_STATUS, default=BS_INPROGRESS)
 
+    class Meta:
+        ordering = ['date_start']
+
     def __unicode__(self):
-        return u'%s %s' % (self.thread, self.build_status, )
+        return u'%s %s' % (self.thread, self.build_result, )
+
+    @property
+    def build_result(self):
+        result = [v[1] for i, v in enumerate(self.BUILD_STATUS) if v[0] == self.build_status]
+        return u'%s' % (result[0],)
+
+    @property
+    def build_time(self):
+        delta = datetime.timedelta(microseconds=self.ran_for)
+        days, seconds, microseconds = delta.days, delta.seconds, delta.microseconds 
+        if days > 0:
+            return u'%s days' % (seconds,)
+        if seconds > 0:
+            return u'%s seconds' % (seconds,)
+        if microseconds > 0:
+            return u'%s microseconds' % (microseconds,)
+
+        
 
     def add_log(self,value,name):
         name = name if name else 'items'

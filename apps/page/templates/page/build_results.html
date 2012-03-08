@@ -1,0 +1,11 @@
+{% load humanize %}
+{% for b in result_list %}
+<li class="build_result {{ b.build_result|lower }}">
+    {{ forloop.counter }}.
+    {{ b.build_result }}
+    @{{ b.date_end|naturalday }} - {{ b.date_end|date:"P" }}
+    Running time: {{ b.build_time }}
+</li>
+{% empty %}
+<li>No Builds</li>
+{% endfor %}

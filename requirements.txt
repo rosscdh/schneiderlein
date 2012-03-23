@@ -8,6 +8,7 @@ django-mptt
 -e git+https://github.com/stard0g101/needle.git#egg=needle
 -e git+https://github.com/dragoon/django-selenium.git#egg=django-selenium
 -e git+https://github.com/stchris/untangle.git#egg=untangle
+-e git+https://github.com/sorl/sorl-thumbnail.git#egg=sorl-thumbnail
 python-dateutil
 PIL
 selenium

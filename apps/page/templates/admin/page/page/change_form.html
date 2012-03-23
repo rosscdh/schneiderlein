@@ -24,7 +24,7 @@
 					<p>Using the clickable interface below, select page elements to test for layout and color consistency.</p>
 					<p>By default, the entire page will be tested for layout and consistency, however the little tailor enables you to test individual page elements.</p>
 					<iframe class="module aligned float-right" id="overview_target" src="{% url page-load_remote page_id=original.id %}" width="70%" height="600"></iframe>
-					<ul id="selected_elements" class="float-left"></ul>
+					<ul id="selected_elements" class="list_elements float-left"></ul>
 				</div>
 			</div>
 
@@ -36,11 +36,7 @@
 				<li><a class="ajax" data-target="div#overview_page" data-postsuccess="" href="{% url tailor-start_process process_name='tailor_run_layout_test' %}?page_id={{ original.pk }}">Build now</a></li>
 				</ul>
 				<div class="module">
-				<p>Here the user is able to view previous build results, as well as schedule a new build to run now.</p>
-				<p>A navigable list of build logs [datetime, build_result, build_thumbnail]</p>
-				<p>The list rows are clickable and when clicked will show a modal window with the selected build log as well as a larger version of the build_thumbnail</p>
-				<p>build_thumbnail == a dual screenshot of the result_thumbnail next to the baseline_thumbnail, for historical comparison</p>
-				<ul id="list-builds" class="float-left">
+				<ul id="list-builds" class="list_elements float-left">
 				    {% builds_for original %}
 				</ul>
 				</div>
@@ -61,16 +57,17 @@
 			clear:right;
 			position:relative;
 			right:-25px;
-			border:solid #ccc 1px;
 			background-color:#ddd;
-			padding:2px 4px;
 		}
 		ul#selected_elements{
 			width:300px;
 		}
-		ul#selected_elements li{
+		ul.list_elements li{
+			border:solid #ccc 1px;
+			padding:2px 4px;
 			height:25px;
 			padding:3px 5px;
+			margin:5px 0px;
 		}
 
 		</style>
@@ -153,11 +150,11 @@
 					testable_element.val(testable_elements) 
 					$(this).parent().remove();// remove the containing LI
 				});
-				$('ul#selected_elements li').live('mouseover', function(event) {
+				$('ul.list_elements li').live('mouseover', function(event) {
 					css_path = $(this).find('a.list_remove').attr('data-css_path');
 					$c.find(css_path).css('border', 'solid #c00 1px')
 				});
-				$('ul#selected_elements li').live('mouseout', function(event) {
+				$('ul.list_elements li').live('mouseout', function(event) {
 					css_path = $(this).find('a.list_remove').attr('data-css_path');
 					$c.find(css_path).css('border', '')
 				});

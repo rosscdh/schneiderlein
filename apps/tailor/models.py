@@ -92,7 +92,7 @@ def build_item_complete_handler(sender, **kwargs):
     log.ran_for = difference.microseconds
 
     # if its nto an illegal status (ie has failed)
-    if log.build_status not in [CuttingRoomLog.BS_FAIL, CuttingRoomLog.BS_INVALID]:
+    if not log.build_status or log.build_status not in [CuttingRoomLog.BS_FAIL, CuttingRoomLog.BS_INVALID]:
         log.build_status = CuttingRoomLog.BS_SUCCESS
 
     log.save()

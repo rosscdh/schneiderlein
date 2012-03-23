@@ -6,7 +6,7 @@ register = template.Library()
 
 @register.inclusion_tag('page/build_results.html')
 def builds_for(page):
-    result_list = CuttingRoomLog.objects.filter(page=page).all()
+    result_list = CuttingRoomLog.objects.filter(page=page).all().order_by('-id')
     return dict({
         'result_list': result_list,
         'page': page,

@@ -184,6 +184,10 @@ LOGGING = {
     }
 }
 
+SELENIUM_BROWSER_CAPABILITIES = dict({
+    'browserName': 'firefox',
+})
+
 # Include local_settings.py for local overrides
 try:
     from local_settings import *

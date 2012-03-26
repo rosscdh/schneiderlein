@@ -43,19 +43,4 @@ except ImportError:
     pass
 
 class JsonListField(JSONField):
-    def add(value, key=None):
-        key = key if key else 'items'
-        if key not in self.value:
-            self.value[key] = []
-
-        self.value[key].append(value)
-
-        return self.value[key]
-
-    def delete(key):
-        if key not in self.value:
-            return True
-        else:
-            del self.value[key]
-        return self.value
-
+  pass

@@ -29,3 +29,4 @@ class CuttingRoomHandler(logging.Handler): # Inherit from logging.Handler
 
         log.add_log(msg, 'logs')
         log.save()
+

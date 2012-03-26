@@ -1,13 +1,21 @@
 {% load humanize thumbnail %}
 {% for b in result_list %}
-<li class="build_result {{ b.build_result|lower }}">
+<li class="build_result {{ b.build_result|lower|slugify }}">
     {{ forloop.counter }}.
     <strong>{{ b.build_result }}</strong>
-    @{{ b.date_end|naturalday }} - {{ b.date_end|date:"P" }}<br/>
+    @{{ b.date_start|naturalday }} - {{ b.date_end|date:"P" }}<br/>
     Running time: {{ b.build_time }}
+    <div class="build-log">
+        <ol>
+        {% for l in b.body.logs %}
+            <li>{{ l.msg }}</li>
+        {% endfor %}
+        </ol>
+    </div>
     {% thumbnail u.profile.profile_picture "120x120" crop="center" as thumb %}
         <a href=""><img src="{{ MEDIA_URL }}{{ thumb }}" alt="" title="" border="0"/></a>
     {% endthumbnail %}
+
 </li>
 {% empty %}
 <li>No Builds</li>

@@ -69,7 +69,26 @@
 			padding:3px 5px;
 			margin:5px 0px;
 		}
-
+        ul#list-builds{
+            list-style-type:none;
+            margin:0px;
+            padding:0px;
+        }
+        ul#list-builds li{
+            list-style-type:none;
+            margin:5px 0px;
+        }
+        ul#list-builds li.success{
+            background-color:#0c0;
+            border:solid #ccc 1px;
+        }
+        ul#list-builds li.failed{
+            background-color:#E17009;
+            border:solid #ccc 1px;
+        }
+        ul#list-builds li div.build-log{
+            display:none;
+        }
 		</style>
 
 		<script type="text/javascript">

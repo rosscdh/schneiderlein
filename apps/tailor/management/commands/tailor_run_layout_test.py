@@ -57,7 +57,7 @@ class Command(BaseCommand):
         if all_pages in ['False',False] and num_pages_ids == 0:
             raise CommandError('Please specify page_id(s) to test in form: tailor_run_layout_test <id> <id> <id> ...')
 
-        self.needle = Spindle(capture=generate_screenshot, output_path=OUTPUT_PATH)
+        self.spindle = Spindle(capture=generate_screenshot, output_path=OUTPUT_PATH)
 
         if all_pages == True:
             args = []
@@ -72,8 +72,8 @@ class Command(BaseCommand):
 
                 self.test_page(url=page.url, elements_list=page.get_test_elements(), page=page)
 
-        self.needle.driver.close()
-        self.needle.driver.quit()
+        self.spindle.driver.close()
+        self.spindle.driver.quit()
 
         # send the end signal
         signals.build_item_complete.send(sender=self, thread=thread.get_ident())
@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
         # get needle driver url
         logger.info('Loading Test Url: %s' % url)
-        self.needle.driver.get( url )
+        self.spindle.driver.get( url )
 
         elements = []
         if not elements_list or len(elements_list) == 0:
@@ -100,13 +100,13 @@ class Command(BaseCommand):
                 elements.append( e )
 
         # set needle output path
-        self.needle.output_path =  '%s%s/' % (OUTPUT_PATH, page.pk,)
-        logger.info('Output path: %s' % self.needle.output_path)
+        self.spindle.output_path =  '%s%s/' % (OUTPUT_PATH, page.pk,)
+        logger.info('Output path: %s' % self.spindle.output_path)
 
         # if the dir does not exist make it.. make it good
-        if not os.path.exists(self.needle.output_path):
-            logger.warning('Output path Did not exist creating: %s' % self.needle.output_path)
-            os.makedirs(self.needle.output_path)
+        if not os.path.exists(self.spindle.output_path):
+            logger.warning('Output path Did not exist creating: %s' % self.spindle.output_path)
+            os.makedirs(self.spindle.output_path)
 
         # loop over provided elements
         for e in elements:
@@ -114,7 +114,7 @@ class Command(BaseCommand):
             e_name = slugify(e)
 
             logger.info('Selenium find "%s"' % e)
-            blocks = self.needle.driver.find_elements_by_css_selector( e )
+            blocks = self.spindle.driver.find_elements_by_css_selector( e )
 
             num_blocks = len(blocks)
             logger.info('%d Blocks Found for element "%s"\n' % (num_blocks, e,), extra={'page': page, 'element': e})
@@ -124,7 +124,7 @@ class Command(BaseCommand):
                     c = c + 1
                     element_name = '%s-%02d' % (e_name, c,)
                     try:
-                        self.needle.assertScreenshot(b, element_name, NEEDLE_TOLERANCE)
+                        self.spindle.assertScreenshot(b, element_name, NEEDLE_TOLERANCE)
                     except AssertionError as error:
                         # this would trigger a failed test - Element Layout No Match
                         logger.error('ElementLayoutNoMatch - Element Layout does not match its baseline: %s' % error)

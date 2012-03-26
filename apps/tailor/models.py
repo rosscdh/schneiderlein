@@ -22,14 +22,14 @@ class CuttingRoomLog(models.Model):
     """
     thread = models.IntegerField()
     page = models.ForeignKey(Page,null=True, blank=True)
-    date_start = models.DateTimeField(auto_now=True, auto_now_add=True)
+    date_start = models.DateTimeField(auto_now=True, auto_now_add=False)
     date_end = models.DateTimeField(auto_now=False, auto_now_add=False, null=True,blank=True)
     ran_for = models.BigIntegerField(null=True, blank=True)
     body = JsonListField(null=True, blank=True)
     build_status = models.IntegerField(choices=BUILD_STATUS, default=BS_INPROGRESS)
 
     class Meta:
-        ordering = ['date_start']
+        ordering = ['-id']
 
     def __unicode__(self):
         return u'%s %s' % (self.thread, self.build_result, )
@@ -92,9 +92,8 @@ def build_item_complete_handler(sender, **kwargs):
     log.ran_for = difference.microseconds
 
     # if its nto an illegal status (ie has failed)
-    if not log.build_status or log.build_status not in [CuttingRoomLog.BS_FAIL, CuttingRoomLog.BS_INVALID]:
+    if log.build_status not in [CuttingRoomLog.BS_FAIL, CuttingRoomLog.BS_INVALID]:
         log.build_status = CuttingRoomLog.BS_SUCCESS
-
     log.save()
 
 build_item_complete.connect(build_item_complete_handler)

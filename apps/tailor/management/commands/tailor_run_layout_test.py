@@ -72,6 +72,9 @@ class Command(BaseCommand):
 
                 self.test_page(url=page.url, elements_list=page.get_test_elements(), page=page)
 
+        self.needle.driver.close()
+        self.needle.driver.quit()
+
         # send the end signal
         signals.build_item_complete.send(sender=self, thread=thread.get_ident())
 

@@ -59,17 +59,17 @@ def admin_sitemap_import(request):
 def admin_load_page_url(request, page_id):
     page = get_object_or_404(Page, pk=page_id)
 
-    needle = Spindle(capture=False, output_path='/tmp/')
     try:
+      needle = Spindle(capture=False, output_path='/tmp/')
       response = needle.getPageHTML(page.url)
     except:
-      raise Http404('Url "%s" is not available. Please check internet connection and that selenium server is running (tailor_start)' % page.url)
+      raise Http404('Url "%s" is not available. Please check internet connection and that selenium server is running (tailor_start), and that you have Java and if running headless tehn Xfvb as well' % page.url)
 
     url = urlparse.urlparse(page.url)
     remote_html = smart_unicode(response)
 
     replace = '="%s://%s/' % (url.scheme,url.hostname,)
-    remote_html = remote_html.replace('="/', replace)
+#    remote_html = remote_html.replace('="/', replace)
 
     return render_to_response(
         'admin/page/page/remote_page.html', {

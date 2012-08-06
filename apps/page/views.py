@@ -63,7 +63,7 @@ def admin_load_page_url(request, page_id):
       needle = Spindle(capture=False, output_path='/tmp/')
       response = needle.getPageHTML(page.url)
     except:
-      raise Http404('Url "%s" is not available. Please check internet connection and that selenium server is running (tailor_start), and that you have Java and if running headless tehn Xfvb as well' % page.url)
+      raise Http404('Url "%s" is not available. Please check internet connection and that selenium server is running (tailor_start), and that you have Java and if running headless then Xfvb as well' % page.url)
 
     url = urlparse.urlparse(page.url)
     remote_html = smart_unicode(response)
